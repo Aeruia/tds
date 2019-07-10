@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <nav class="navbar navbar-light bg-light">
+        <h2>List of all suppliers</h2>
+        <a class="btn btn-outline-info" href="{{ path("supplier.create")}}">Create</a>
+    </nav>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <table class="table table-stripped">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Address</td>
+                <td>Telephone</td>
+                <td>Email</td>
+                <td>Contact Person</td>
+                <td>Local</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for supplier in suppliers %}
+                <tr>
+                    <td>{{ supplier.id }}</td>
+                    <td>
+                        <a href="{{ path("supplier.id", { id: supplier.id }) }}">{{ supplier.name }}</a>
+                    </td>
+                    <td>{{ supplier.address }}</td>
+                    <td>{{ supplier.telephone }}</td>
+                    <td>{{ supplier.email }}</td>
+                    <td>{{ supplier.contactPerson }}</td>
+                    {% if supplier.local %}
+                        <td>Oui</td>
+                    {% else %}
+                        <td>Non</td>
+                    {% endif %}
+                    <td>
+                        <a class="btn btn-danger" href="{{ path("supplier.delete", { id: supplier.id }) }}">Delete</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-info" href="{{ path("supplier.edit", { id: supplier.id })}}">Modify</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

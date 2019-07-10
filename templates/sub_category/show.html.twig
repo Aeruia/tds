@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <nav class="navbar navbar-light bg-light">
+        <h2>{{ subCategory.name }}</h2>
+        {% for user in subCategory.idUser %}
+            <span>{{ user.username }}</span>
+        {% endfor %}
+        <a class="btn btn-outline-info" href="{{ path("subcategory.create", { id: subCategory.id })}}">Modify</a>
+    </nav>
+    {% for message in app.flashes('success') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Products</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-info">
+                <td>{{ subCategory.idCategory}}</td>
+                <td>
+                    {% for product in subCategory.products %}
+                        <a href="{{ path("product.id", { id: product.id }) }}">{{ product.name }}</a>
+                    {% endfor %}
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+{% endblock %}
