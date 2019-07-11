@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * @Route("/subcategory", name="subcategory.")
@@ -58,10 +58,15 @@ class SubCategoryController extends AbstractController
     public function remove(SubCategory $subCategory)
     {
         $em = $this->getDoctrine()->getManager();
-        $em->remove($subCategory);
-        $em->flush();
-        $this->addFlash('success', 'Subcategory deleted');
-        return $this->redirect($this->generateUrl('subcategory.index'));
+        try {
+            $em->remove($subCategory);
+            $em->flush();
+            $this->addFlash('success', 'Subcategory deleted');
+            return $this->redirect($this->generateUrl('subcategory.index'));
+        } catch (ForeignKeyConstraintViolationException $em) {
+            $this->addFlash('danger', 'Impossible, cette subcategory est associé à un produit ');
+            return  $this->redirectToRoute('subcategory.index');
+        }
     }
     /**
      * @Route("/{id}", name="id")

@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success">
-        {{ message }}
-    </div>
+{% for label, messages in app.flashes(['success', 'danger']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
 {% endfor %}
 <nav class="navbar navbar-light bg-light">
     <h2>List of all catagories</h2>

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Form\CategoryType;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * @Route("/category", name="category.")
@@ -56,10 +57,15 @@ class CategoryController extends AbstractController
     public function remove(Category $category)
     {
         $em = $this->getDoctrine()->getManager();
-        $em->remove($category);
-        $em->flush();
-        $this->addFlash('success', 'Category deleted');
-        return $this->redirect($this->generateUrl('category.index'));
+        try {
+            $em->remove($category);
+            $em->flush();
+            $this->addFlash('success', 'Category deleted');
+            return $this->redirect($this->generateUrl('category.index'));
+        } catch (ForeignKeyConstraintViolationException $em) {
+            $this->addFlash('danger', 'Impossible, cette category est associé à un produit ');
+            return  $this->redirectToRoute('category.index');
+        }
     }
     /**
      * @Route("/{id}", name="id")

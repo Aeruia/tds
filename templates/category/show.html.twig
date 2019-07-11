@@ -6,6 +6,7 @@
             <div>{{ user.username }}</div>
         {% endfor %}
         <a class="btn btn-outline-info" href="{{ path("category.edit", { id: category.id })}}">Modify</a>
+        <a class="btn btn-danger" href="{{ path("category.delete", { id: category.id }) }}">Delete</a>
     </nav>
     {% for message in app.flashes('success') %}
         <div class="flash-notice">
@@ -29,7 +30,7 @@
                             <a href="{{ path("product.id", { id: product.id }) }}">{{ product.name }}</a>
                         {% endfor %}
                     </td>
-                    <a class="btn btn-danger" href="{{ path("category.delete", { id: category.id }) }}">Delete</a>
+
                 </tr>
             {% endfor %}
         </tbody>
